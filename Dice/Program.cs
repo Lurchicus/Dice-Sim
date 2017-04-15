@@ -23,25 +23,11 @@ namespace Dice
         public static bool Quit = false;
         static void Main(string[] args)
         {
-            Console.WriteLine("Dice Tosser 1.0 by Dan Rhea © 2017\n");
-            Console.WriteLine("q to quit, ? for help");
-            //foreach (string arg in args)
-            //{
-            //     Parse(arg);
-            //}
             string Inp = "";
             Int32 Tot = 0;
-            //dies dice = new dies(diceCount, adjust, sideCount);
-            //Tot += dice.throwDice();
-            //if (Debug) {
-            //    for (Int32 Idx = 0; Idx < dice.Count; Idx++)
-            //    {
-            //        Console.WriteLine("Die " + Idx + ": " + dice.Result(Idx));
-            //    }
-            //}
-            //dice.Empty();
-            //Console.WriteLine(Tot + " (" + diceCount + "d" + sideCount + (adjust >= 0 ? "+":"") + adjust + ")");
-            //Console.Write(">");
+
+            Console.WriteLine("Dice Tosser 1.0 by Dan Rhea © 2017\n");
+            Console.WriteLine("q to quit, ? for help");
             if (args.Length > 0)
             {
                 Inp = args[0];
