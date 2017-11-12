@@ -44,6 +44,7 @@ namespace Dice
                 {
                     Tot = 0;
                     dies dice = new dies(diceCount, adjust, sideCount);
+                    //using(dies) {
                     Tot += dice.throwDice();
                     if (Debug)
                     {
@@ -53,10 +54,11 @@ namespace Dice
                         }
                     }
                     dice.Empty();
-                    Console.WriteLine(Tot + " (" + diceCount + "d" + sideCount + (adjust >= 0 ? "+" : "") + adjust + ")");
-                    Console.Write(">");
-                    Inp = Console.ReadLine();
                 }
+                Console.WriteLine(Tot + " (" + diceCount + "d" + sideCount + (adjust >= 0 ? "+" : "") + adjust + ")");
+                Console.Write(">");
+                Inp = Console.ReadLine();
+
             }
         }
 
