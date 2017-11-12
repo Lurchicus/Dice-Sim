@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dice
 {
@@ -44,7 +40,6 @@ namespace Dice
                 {
                     Tot = 0;
                     dies dice = new dies(diceCount, adjust, sideCount);
-                    //using(dies) {
                     Tot += dice.throwDice();
                     if (Debug)
                     {
