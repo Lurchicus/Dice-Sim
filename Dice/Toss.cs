@@ -2,6 +2,12 @@
 
 namespace Dice
 {
+    /// <summary>
+    /// CLI Dice throwing simulator
+    /// </summary>
+    //
+    //  CLI Parse rule
+    //
     //  [quantity int (optional: default="1")]
     //  d 
     //  [sides int (optional: default=6)]
@@ -10,6 +16,7 @@ namespace Dice
     //      [adjustment int (default="0")] 
     //      (optional)
     //  ]
+    //
     class Toss
     {
         public static Int32 diceCount = 1;
@@ -17,21 +24,27 @@ namespace Dice
         public static Int32 adjust = 0;
         public static bool Debug = false;
         public static bool Quit = false;
+
+        /// <summary>
+        /// Take optional initial CLI input then look for and process 
+        /// addtional input 
+        /// </summary>
+        /// <param name="args">Command line arguments</param>
         static void Main(string[] args)
         {
             string Inp = "";
             Int32 Tot = 0;
 
-            Console.WriteLine("Dice Tosser 1.0 by Dan Rhea © 2017\n");
-            Console.WriteLine("q to quit, ? for help");
+            Wl("Dice Tosser v1.0 by Dan Rhea © 2017\n");
+            Wl("q to quit, ? for help");
             if (args.Length > 0)
             {
                 Inp = args[0];
             }
             else
             {
-                Console.Write(">");
-                Inp = Console.ReadLine();
+                W(">");
+                Inp = R();
             }
             while (!Quit)
             {
@@ -40,23 +53,27 @@ namespace Dice
                 {
                     Tot = 0;
                     dies dice = new dies(diceCount, adjust, sideCount);
-                    Tot += dice.throwDice();
+                    Tot += dice.ThrowDice();
                     if (Debug)
                     {
                         for (Int32 Idx = 0; Idx < dice.Count; Idx++)
                         {
-                            Console.WriteLine("Die " + Idx + ": " + dice.Result(Idx));
+                            Wl("Die " + Idx + ": " + dice.Result(Idx));
                         }
                     }
                     dice.Empty();
                 }
-                Console.WriteLine(Tot + " (" + diceCount + "d" + sideCount + (adjust >= 0 ? "+" : "") + adjust + ")");
-                Console.Write(">");
-                Inp = Console.ReadLine();
+                Wl(Tot + " (" + diceCount + "d" + sideCount + (adjust >= 0 ? "+" : "") + adjust + ")");
+                W(">");
+                Inp = R();
 
             }
         }
 
+        /// <summary>
+        /// Parse and process individual CLI imputs
+        /// </summary>
+        /// <param name="arg">string Command line input</param>
         public static void Parse(string arg)
         {
             string arrg = arg.Trim().ToUpper();
@@ -68,34 +85,34 @@ namespace Dice
                 case "-d":
                     if (Debug)
                     {
-                        Console.WriteLine("Debug off");
+                        Wl("Debug off");
                         Debug = false;
                     }
                     else
                     {
-                        Console.WriteLine("Debug on");
+                        Wl("Debug on");
                         Debug = true;
                     }
                     break;
                 case "q":
-                    Console.WriteLine("Goodbye...");
+                    Wl("Goodbye...");
                     Quit = true;
                     break;
                 case "x":
-                    Console.WriteLine("Goodbye...");
+                    Wl("Goodbye...");
                     Quit = true;
                     break;
                 case "?":
-                    Console.WriteLine("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip.");
-                    Console.WriteLine("\"-d\" Debug toggle (shows each die result)");
-                    Console.WriteLine("\"q\" or \"x\" to quit");
-                    Console.WriteLine("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
+                    Wl("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip.");
+                    Wl("\"-d\" Debug toggle (shows each die result)");
+                    Wl("\"q\" or \"x\" to quit");
+                    Wl("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
                     break;
                 case "-?":
-                    Console.WriteLine("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip.");
-                    Console.WriteLine("\"-d\" Debug toggle (shows each die result)");
-                    Console.WriteLine("\"q\" or \"x\" to quit");
-                    Console.WriteLine("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
+                    Wl("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip.");
+                    Wl("\"-d\" Debug toggle (shows each die result)");
+                    Wl("\"q\" or \"x\" to quit");
+                    Wl("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
                     break;
                 default:
                     if (arrg.Length == 0)
@@ -119,7 +136,8 @@ namespace Dice
                             diceCount = 1;
                             arrg = arrg.Substring(1, arrg.Length - 1);
                         }
-                    } else
+                    }
+                    else
                     {
                         string[] ary = arrg.Split(parm1, StringSplitOptions.RemoveEmptyEntries );
                         sside = ary[0];
@@ -192,5 +210,23 @@ namespace Dice
                     break;
             }
         }
+
+        /// <summary>
+        /// wrapper function for Console.WriteLine
+        /// </summary>
+        /// <param name="msg">string to output</param>
+        public static void Wl(string msg) => Console.WriteLine(msg);
+
+        /// <summary>
+        /// Wrapper function for Console.Write
+        /// </summary>
+        /// <param name="msg">string to output</param>
+        public static void W(string msg) => Console.Write(msg);
+
+        /// <summary>
+        /// Wrapper function for Console.ReadLine
+        /// </summary>
+        /// <returns>string input</returns>
+        public static string R() => Console.ReadLine();
     }
 }

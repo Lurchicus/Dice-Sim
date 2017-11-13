@@ -2,47 +2,64 @@
 
 namespace Dice
 {
+    /// <summary>
+    /// Object describes a single die with "sides" sides or faces (1 or
+    /// 2 sides indicates a coin which can return 0 or 1). By creating 
+    /// individual die objects a true simulation of shrowing one or 
+    /// more dies can be accomplished.
+    /// </summary>
     class die
     {
         private Int32 diceSides;
         private Int32 diceResult;
-        //public static Random chance = new Random((Int32)DateTime.Today.Ticks);
+        
         public static Random chance = new Random();
 
-        public die()
-        {
-            diceSides = 0;
-        }
+        /// <summary>
+        /// Default constructor (0 sides)
+        /// </summary>
+        public die() => diceSides = 0;
 
-        public die(Int32 sides)
-        {
-            diceSides = sides;
-        }
+        /// <summary>
+        /// Overload constructor creates a die of "sides" sides
+        /// </summary>
+        /// <param name="sides">Int32 sides on die</param>
+        public die(Int32 sides) => diceSides = sides;
 
-        public Int32 Throw()
+        /// <summary>
+        /// Simulate throwing a die or coin
+        /// </summary>
+        /// <returns>Int32 result of die throw</returns>
+        public int GetThrow()
         {
             //Random chance = new Random();
-            if (sides == 1) { sides = 2; }
-            if (sides == 2)
+            if (Sides == 1) { Sides = 2; }
+            if (Sides == 2)
             {
-                //d1 or d2 is a 0 or 1 coing toss
-                result = chance.Next(0, sides);
+                //d1 or d2 is a 0 or 1 coin toss
+                Result = chance.Next(0, Sides);
             }
             else
             {
-                result = chance.Next(1, sides + 1);
+                Result = chance.Next(1, Sides + 1);
             }
-            diceResult = result;
-            return result;
+            diceResult = Result;
+            return Result;
         }
 
-        public Int32 sides
+        /// <summary>
+        /// Sides on the die 
+        /// </summary>
+        public Int32 Sides
         {
             get { return diceSides; }
             set { diceSides = value; }
         }
 
-        public Int32 result
+        /// <summary>
+        /// Result of dice throw
+        /// </summary>
+        public Int32 Result
         {
             get { return diceResult; }
             set { diceResult = value; }
