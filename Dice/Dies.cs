@@ -7,7 +7,8 @@ namespace Dice
     /// The dies class creates a collection of die objects. The dies are in a
     /// list object (imagine a dice cup). The Quantity is the number of dice
     /// the sides are the number of sides on the die and adjustment is a 
-    /// value added to the sum of the rolls of the individual dies.
+    /// negitive or positive value added to the sum of the rolls of the 
+    /// individual dies.
     /// </summary>
     class dies 
     {
