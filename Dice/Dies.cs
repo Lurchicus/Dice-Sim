@@ -69,34 +69,49 @@ namespace Dice
         /// </summary>
         /// <param name="Idx">Int32 number of specific die</param>
         /// <returns>Int32 result of a given die</returns>
-        public Int32 Result(Int32 Idx) => Cup[Idx].Result;
+        public Int32 Result(Int32 Idx)
+        {
+            return Cup[Idx].Result;
+        }
 
         /// <summary>
         /// Adjustment to final result
         /// </summary>
         public int GetAdjustments()
-        { return Adjustment; }
+        {
+            return Adjustment;
+        }
 
         /// <summary>
         /// Adjustment to final result
         /// </summary>
         public void SetAdjustments(int value)
-        { Adjustment = value; }
+        {
+            Adjustment = value;
+        }
 
         /// <summary>
         /// Number of dies
         /// </summary>
-        public int Count => Quantity;
+        public int GetCount()
+        {
+            return Quantity;
+        }
 
         /// <summary>
         /// Number of dies
         /// </summary>
         public void SetCount(int value)
-        { Quantity = value; }
+        {
+            Quantity = value;
+        }
 
         /// <summary>
         /// Clears all of the dies in the dice "cup"
         /// </summary>
-        public void Empty() => Cup.Clear();
+        public void Empty()
+        {
+            Cup.Clear();
+        }
     }
 }

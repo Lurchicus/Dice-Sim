@@ -61,7 +61,7 @@ namespace Dice
                     if (Debug)
                     {
                         //If debug is on, show the result on each die
-                        for (Int32 Idx = 0; Idx < dice.Count; Idx++)
+                        for (Int32 Idx = 0; Idx < dice.GetCount(); Idx++)
                         {
                             Wl("Die " + Idx + ": " + dice.Result(Idx));
                         }
@@ -244,18 +244,27 @@ namespace Dice
         /// wrapper function for Console.WriteLine
         /// </summary>
         /// <param name="msg">string to output</param>
-        public static void Wl(string msg) => Console.WriteLine(msg);
+        public static void Wl(string msg)
+        {
+            Console.WriteLine(msg);
+        }
 
         /// <summary>
         /// Wrapper function for Console.Write
         /// </summary>
         /// <param name="msg">string to output</param>
-        public static void W(string msg) => Console.Write(msg);
+        public static void W(string msg)
+        {
+            Console.Write(msg);
+        }
 
         /// <summary>
         /// Wrapper function for Console.ReadLine
         /// </summary>
         /// <returns>string input</returns>
-        public static string R() => Console.ReadLine();
+        public static string R()
+        {
+            return Console.ReadLine();
+        }
     }
 }
