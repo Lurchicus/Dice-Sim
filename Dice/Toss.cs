@@ -3,7 +3,7 @@
 namespace Dice
 {
     /// <summary>
-    /// CLI Dice throwing simulator
+    /// CLI Dice throwing simulator (Dice-Sim)
     /// </summary>
     //
     //  CLI Parse rule6
