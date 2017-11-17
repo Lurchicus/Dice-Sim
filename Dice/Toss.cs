@@ -6,7 +6,7 @@ namespace Dice
     /// CLI Dice throwing simulator
     /// </summary>
     //
-    //  CLI Parse rule
+    //  CLI Parse rule6
     //
     //  [quantity int (optional: default="1")]
     //  d 
