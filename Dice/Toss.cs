@@ -11,10 +11,9 @@ namespace Dice
     //  [quantity int (optional: default="1")]
     //  d 
     //  [sides int (optional: default=6)]
-    //  [
+    //  [ (optional, treated as 0 if omitted)
     //      [operator +|- (default="+")]
-    //      [adjustment int (default="0")] 
-    //      (optional)
+    //      [adjustment int (optional: default="0")] 
     //  ]
     //
     class Toss
@@ -56,7 +55,7 @@ namespace Dice
                 {
                     //If we are not quitting, instanciate dies and throw
                     Tot = 0;
-                    dies dice = new dies(diceCount, adjust, sideCount);
+                    Dies dice = new Dies(diceCount, adjust, sideCount);
                     Tot += dice.ThrowDice();
                     if (Debug)
                     {
@@ -92,8 +91,8 @@ namespace Dice
         public static void Parse(string arg)
         {
             string arrg = arg.Trim().ToUpper();
-            string[] parm1 = { "D" };
-            string[] parm2 = { "+", "-" };
+            string[] parm1 = { "D" }; //Dies/sides delimiter
+            string[] parm2 = { "+", "-" }; //Adjustment delimiter
             string sside = "";
             switch (arg) 
             {
@@ -241,21 +240,31 @@ namespace Dice
         }
 
         /// <summary>
-        /// wrapper function for Console.WriteLine
+        /// wrapper function for Console.WriteLine()
         /// </summary>
-        /// <param name="msg">string to output</param>
-        public static void Wl(string msg)
+        /// <param name="Msg">string to output</param>
+        public static void Wl(string Msg)
         {
-            Console.WriteLine(msg);
+            if (Msg != null)
+            {
+                Console.WriteLine(Msg);
+            }
+            else
+            {
+                Console.WriteLine();
+            }
         }
 
         /// <summary>
-        /// Wrapper function for Console.Write
+        /// Wrapper function for Console.Write()
         /// </summary>
-        /// <param name="msg">string to output</param>
-        public static void W(string msg)
+        /// <param name="Msg">string to output</param>
+        public static void W(string Msg)
         {
-            Console.Write(msg);
+            if (Msg != null)
+            {
+                Console.Write(Msg);
+            }
         }
 
         /// <summary>

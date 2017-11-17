@@ -5,10 +5,10 @@ namespace Dice
     /// <summary>
     /// Object describes a single die with "sides" sides or faces (1 or
     /// 2 sides indicates a coin which can return 0 or 1). By creating 
-    /// individual die objects a true simulation of shrowing one or 
+    /// individual die objects a true simulation of throwing one or 
     /// more dies can be accomplished.
     /// </summary>
-    class die
+    class Die
     {
         private Int32 diceSides;
         private Int32 diceResult;
@@ -18,13 +18,13 @@ namespace Dice
         /// <summary>
         /// Default constructor (0 sides)
         /// </summary>
-        public die() => diceSides = 0;
+        public Die() => diceSides = 0;
 
         /// <summary>
         /// Overload constructor creates a die of "sides" sides
         /// </summary>
         /// <param name="sides">Int32 sides on die</param>
-        public die(Int32 sides) => diceSides = sides;
+        public Die(Int32 sides) => diceSides = sides;
 
         /// <summary>
         /// Simulate throwing a die or coin

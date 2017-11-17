@@ -5,29 +5,29 @@ namespace Dice
 {
     /// <summary>
     /// The dies class creates a collection of die objects. The dies are in a
-    /// list object (imagine a dice cup). The Quantity is the number of dice
-    /// the sides are the number of sides on the die and adjustment is a 
+    /// list object (imagine a dice cup). The Quantity is the number of dice,
+    /// sides are the number of sides on the die and adjustment is a 
     /// negitive or positive value added to the sum of the rolls of the 
     /// individual dies.
     /// </summary>
-    class dies 
+    class Dies 
     {
         private Int32 Quantity;
         private Int32 Adjustment;
         private Int32 Sides;
-        public static List<die> Cup = new List<die> { };
+        public static List<Die> Cup = new List<Die> { };
 
         /// <summary>
         /// Default constructor instanciates a single 6 sided die with no 
         /// adjustment.
         /// </summary>
-        public dies()
+        public Dies()
         {
             Quantity = 1;
             Adjustment = 0;
             Sides = 6;
-            List<die> Cup = new List<die> { };
-            die Stone = new die(Sides);
+            List<Die> Cup = new List<Die> { };
+            Die Stone = new Die(Sides);
             Cup.Add(Stone);
         }
 
@@ -38,14 +38,14 @@ namespace Dice
         /// <param name="HowMany">Dies in list</param>
         /// <param name="TotalAdjustment">Adjustment to final result</param>
         /// <param name="NumSides">Number of sides on each die</param>
-        public dies(Int32 HowMany, Int32 TotalAdjustment, Int32 NumSides)
+        public Dies(Int32 HowMany, Int32 TotalAdjustment, Int32 NumSides)
         {
             SetCount(HowMany);
             Adjustment = TotalAdjustment;
             Sides = NumSides;
             for (Int32 Idx = 0; Idx < HowMany; Idx++)
             {
-                die Stone = new die(Sides);
+                Die Stone = new Die(Sides);
                 Cup.Add(Stone);
             }
         }
