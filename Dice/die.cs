@@ -18,13 +18,13 @@ namespace Dice
         /// <summary>
         /// Default constructor (0 sides)
         /// </summary>
-        public Die() => diceSides = 0;
+        public Die() => DiceSides = 0;
 
         /// <summary>
         /// Overload constructor creates a die of "sides" sides
         /// </summary>
         /// <param name="sides">Int32 sides on die</param>
-        public Die(Int32 sides) => diceSides = sides;
+        public Die(Int32 sides) => DiceSides = sides;
 
         /// <summary>
         /// Simulate throwing a die or coin
@@ -43,7 +43,7 @@ namespace Dice
             {
                 Result = chance.Next(1, Sides + 1);
             }
-            diceResult = Result;
+            DiceResult = Result;
             return Result;
         }
 
@@ -52,8 +52,8 @@ namespace Dice
         /// </summary>
         public Int32 Sides
         {
-            get { return diceSides; }
-            set { diceSides = value; }
+            get { return DiceSides; }
+            set { DiceSides = value; }
         }
 
         /// <summary>
@@ -61,8 +61,11 @@ namespace Dice
         /// </summary>
         public Int32 Result
         {
-            get { return diceResult; }
-            set { diceResult = value; }
+            get { return DiceResult; }
+            set { DiceResult = value; }
         }
+
+        public int DiceSides { get => diceSides; set => diceSides = value; }
+        public int DiceResult { get => diceResult; set => diceResult = value; }
     }
 }
