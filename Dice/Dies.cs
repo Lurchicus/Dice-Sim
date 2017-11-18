@@ -45,8 +45,22 @@ namespace Dice
             Sides = NumSides;
             for (Int32 Idx = 0; Idx < HowMany; Idx++)
             {
-                Die Stone = new Die(Sides);
-                Cup.Add(Stone);
+                try
+                {
+                    Die Stone = new Die(Sides);
+                    Cup.Add(Stone);
+                }
+                catch(OutOfMemoryException e)
+                {
+                    Toss.Wl("Error! OutOfMemoryException: " + e.Message);
+                    Cup.Clear();
+                    throw new OutOfMemoryException(); 
+                }
+                catch(Exception e)
+                {
+                    Toss.Wl("Error! Undefined exception: " + e.Message);
+                    Cup.Clear();
+                }
             }
         }
 
@@ -57,7 +71,7 @@ namespace Dice
         public Int32 ThrowDice()
         {
             Int32 Result = 0;
-            for (Int32 Idx = 0; Idx < Quantity; Idx++)
+            for (Int32 Idx = 0; Idx < Cup.Count; Idx++)
             {
                 Result += Cup[Idx].GetThrow();
             }

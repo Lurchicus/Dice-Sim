@@ -33,14 +33,17 @@ namespace Dice
         public int GetThrow()
         {
             //Random chance = new Random();
-            if (Sides == 1) { Sides = 2; }
-            if (Sides == 2)
+            //if (Sides == 1) { Sides = 2; } 
+            //A d1 is coin that can return 0 or 1
+            //A d2 is a coin (or 2 sided die) that can return 1 or 2
+            if (Sides == 1)
             {
-                //d1 or d2 is a 0 or 1 coin toss
+                //d1 is a 0 or 1 coin toss
                 Result = chance.Next(0, Sides);
             }
             else
             {
+                //D2 to D(whatever doesn't overflow an Int32)
                 Result = chance.Next(1, Sides + 1);
             }
             DiceResult = Result;

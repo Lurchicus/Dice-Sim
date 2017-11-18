@@ -16,6 +16,14 @@ namespace Dice
     //      [adjustment int (optional: default="0")] 
     //  ]
     //
+    //  1.0.8.0 - 11/17/2017 - Stored to public GitHub repository
+    //  1.0.9.0 - 11/18/2017 - Check for overlarge values that may cause
+    //            Int32 overflows (most noticable by getting a negitive
+    //            result.
+    //          - Added a try/catch around the die creation code to catrch
+    //            out of memory exceptions. Yes, you can have issues if 
+    //            you try to do 1,000,000,000 coin flips.  
+    //
     class Toss
     {
         public static Int32 diceCount = 1;
@@ -51,32 +59,48 @@ namespace Dice
             {
                 //Parse the input
                 Parse(Inp);
-                if (!Quit)
+                //too big to roll?
+                if ((diceCount * sideCount) + adjust > (Int32.MaxValue / 2) ||
+                    diceCount > (Int32.MaxValue / 2) ||
+                    sideCount > (Int32.MaxValue / 2) ||
+                    adjust > (Int32.MaxValue / 2))
                 {
-                    //If we are not quitting, instanciate dies and throw
-                    Tot = 0;
-                    Dies dice = new Dies(diceCount, adjust, sideCount);
-                    Tot += dice.ThrowDice();
-                    if (Debug)
-                    {
-                        //If debug is on, show the result on each die
-                        for (Int32 Idx = 0; Idx < dice.GetCount(); Idx++)
-                        {
-                            Wl("Die " + Idx + ": " + dice.Result(Idx));
-                        }
-                    }
-                    //Dispose of ther dies
-                    dice.Empty();
-                }
-                if (Quit)
-                {
-                    //If the quit flag is on, get out of here
-                    break;
+                    Wl("Sorry, please reduce the number of dies, sides or the adjustment. It's just too big!");
                 }
                 else
                 {
-                    //Otherwise, Display the result, and reprompt
-                    Wl(Tot + " (" + diceCount + "d" + sideCount + (adjust >= 0 ? "+" : "") + adjust + ")");
+                    if (!Quit)
+                    {
+                        //If we are not quitting, instanciate dies and throw
+                        Tot = 0;
+                        Dies dice = new Dies(diceCount, adjust, sideCount);
+                        Tot += dice.ThrowDice();
+                        if (Debug)
+                        {
+                            //If debug is on, show the result on each die
+                            for (Int32 Idx = 0; Idx < dice.GetCount(); Idx++)
+                            {
+                                Wl("Die " + Idx + ": " + dice.Result(Idx));
+                            }
+                        }
+                        //Dispose of ther dies
+                        dice.Empty();
+                    }
+
+                    if (Quit)
+                    {
+                        //If the quit flag is on, get out of here
+                        break;
+                    }
+                    else
+                    {
+                        //Otherwise, Display the result
+                        Wl(Tot + " (" + diceCount + "d" + sideCount + (adjust >= 0 ? "+" : "") + adjust + ")");
+                    }
+                }
+                if (!Quit)
+                {
+                    //Reprompt
                     W(">");
                     Inp = R();
                 }
@@ -117,13 +141,15 @@ namespace Dice
                     Quit = true;
                     break;
                 case "?": //Display help
-                    Wl("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip.");
+                    Wl("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip");
+                    Wl("where 1 rolls 1 or 0 and 2 rolls 1 or 2.");
                     Wl("\"-d\" Debug toggle (shows each die result)");
                     Wl("\"q\" or \"x\" to quit");
                     Wl("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
                     break;
                 case "-?": //Display help
                     Wl("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip.");
+                    Wl("where 1 rolls 1 or 0 and 2 rolls 1 or 2.");
                     Wl("\"-d\" Debug toggle (shows each die result)");
                     Wl("\"q\" or \"x\" to quit");
                     Wl("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
