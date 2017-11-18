@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Dice
 {
@@ -22,7 +23,9 @@ namespace Dice
     //            result.
     //          - Added a try/catch around the die creation code to catrch
     //            out of memory exceptions. Yes, you can have issues if 
-    //            you try to do 1,000,000,000 coin flips.  
+    //            you try to do 1,000,000,000 coin flips.
+    //          - Pull the real version number for the intro
+    //          - Fix bug where nD1 stopped working (only returned zeros)
     //
     class Toss
     {
@@ -39,10 +42,14 @@ namespace Dice
         /// <param name="args">string[] Command line arguments</param>
         static void Main(string[] args)
         {
-            string Inp = "";
+            string Inp = string.Empty;
             Int32 Tot = 0;
 
-            Wl("Dice Tosser v1.0 by Dan Rhea © 2017\n");
+            Assembly thisAsbly = typeof(Toss).Assembly;
+            AssemblyName thisAsblyName = thisAsbly.GetName();
+            Version ver = thisAsblyName.Version;
+
+            Wl("Dice Tosser "+ver+" by Dan Rhea © 2017\n");
             Wl("q to quit, ? for help");
             if (args.Length > 0)
             {

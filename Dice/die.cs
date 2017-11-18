@@ -39,7 +39,7 @@ namespace Dice
             if (Sides == 1)
             {
                 //d1 is a 0 or 1 coin toss
-                Result = chance.Next(0, Sides);
+                Result = chance.Next(0, Sides + 1);
             }
             else
             {
