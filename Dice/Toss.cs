@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace Dice
@@ -7,7 +8,7 @@ namespace Dice
     /// CLI Dice throwing simulator (Dice-Sim)
     /// </summary>
     //
-    //  CLI Parse rule6
+    //  CLI Parse rule
     //
     //  [quantity int (optional: default="1")]
     //  d 
@@ -26,6 +27,14 @@ namespace Dice
     //            you try to do 1,000,000,000 coin flips.
     //          - Pull the real version number for the intro
     //          - Fix bug where nD1 stopped working (only returned zeros)
+    //  1.0.10.0 - 2/12/2018 - Added a few alternate CLI directives to the
+    //             parser so "-" and "/" prefixes are accepted. 
+    //           - Added GC.Collect() after clearing the die objects
+    //           - Added an "l" command to display the GNU GPL 3
+    //             license.
+    //           - Added a ShowFile() function to show the license file 
+    //             (or any other file for that matter) paginated to fit
+    //             the console screen.
     //
     class Toss
     {
@@ -49,7 +58,7 @@ namespace Dice
             AssemblyName thisAsblyName = thisAsbly.GetName();
             Version ver = thisAsblyName.Version;
 
-            Wl("Dice Tosser "+ver+" by Dan Rhea © 2017\n");
+            Wl("Dice Tosser "+ver+" by Dan Rhea © 2017, 2018\n");
             Wl("q to quit, ? for help");
             if (args.Length > 0)
             {
@@ -92,13 +101,13 @@ namespace Dice
                         }
                         //Dispose of ther dies
                         dice.Empty();
+                        GC.Collect();
                     }
 
                     if (Quit)
                     {
                         //If the quit flag is on, get out of here
-                        break;
-                    }
+                        break;                    }
                     else
                     {
                         //Otherwise, Display the result
@@ -128,6 +137,7 @@ namespace Dice
             switch (arg) 
             {
                 case "-d": //Toggle debug mode on and off
+                case "/d": 
                     if (Debug)
                     {
                         Wl("Debug off");
@@ -140,26 +150,31 @@ namespace Dice
                     }
                     break;
                 case "q": //Set quit flag
+                case "-q":
+                case "/q":
                     Wl("Goodbye...");
                     Quit = true;
                     break;
                 case "x": //Set quit flag
+                case "-x":
+                case "/x":
                     Wl("Goodbye...");
                     Quit = true;
                     break;
                 case "?": //Display help
+                case "-?":
+                case "/?":
                     Wl("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip");
                     Wl("where 1 rolls 1 or 0 and 2 rolls 1 or 2.");
                     Wl("\"-d\" Debug toggle (shows each die result)");
                     Wl("\"q\" or \"x\" to quit");
+                    Wl("\"l\" to display the license file");
                     Wl("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
                     break;
-                case "-?": //Display help
-                    Wl("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip.");
-                    Wl("where 1 rolls 1 or 0 and 2 rolls 1 or 2.");
-                    Wl("\"-d\" Debug toggle (shows each die result)");
-                    Wl("\"q\" or \"x\" to quit");
-                    Wl("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
+                case "l": //Display license text
+                case "-l":
+                case "/l":
+                    ShowFile("\\gnu_gpl3.txt");
                     break;
                 default: //Parse individual dice roll command or default to 1d6+0
                     if (arrg.Length == 0)
@@ -269,6 +284,83 @@ namespace Dice
                         }
                     }
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Will display a paginated file to the Console. If a path
+        /// is not supplied, the same path where the program resides
+        /// is used
+        /// </summary>
+        /// <param name="File">File to display</param>
+        /// <param name="Path">Path the file resides in (optional)</param>
+        public static void ShowFile(String FileName, String PathName = null)
+        {
+            Int32 ScreenHeight = Console.WindowHeight;
+            Int32 ScreenWidth = Console.WindowWidth;
+            Int32 Row = 0;
+            String Inp = "";
+            String Nam = "";
+            String AppPath = "";
+
+            if (PathName == null)
+            {
+                AppPath = Assembly.GetExecutingAssembly().Location;
+                Nam = Path.GetFileName(AppPath);
+                AppPath = AppPath.Substring(0, AppPath.Length - Nam.Length);
+                if (FileName.Substring(0, 2) != "\\")
+                {
+                    AppPath += "\\" + FileName;
+                }
+                else
+                {
+                    AppPath += FileName;
+                }
+            }
+            else
+            {
+                if (FileName.Substring(0, 2) != "\\")
+                {
+                    AppPath += PathName + "\\" + FileName;
+                }
+                else
+                {
+                    AppPath = PathName + FileName;
+                }
+            }
+            try
+            {
+                using (StreamReader sr = new StreamReader(AppPath))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        Wl(line);
+                        if (line.Length > ScreenWidth-1)
+                        {
+                            Row = Row + (Int32)(line.Length / ScreenWidth - 1);
+                        }
+                        else
+                        {
+                            Row++; 
+                        }
+                        if(Row >= ScreenHeight-1)
+                        {
+                            Row = 0;
+                            W("Press Enter to continue (enter q to quit):");
+                            Inp = R();
+                            if (Inp == "q" || Inp == "Q")
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Wl("Could not read the the text in file "+FileName+".");
+                Wl(e.Message);
             }
         }
 
