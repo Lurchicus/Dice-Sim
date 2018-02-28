@@ -35,6 +35,12 @@ namespace Dice
     //           - Added a ShowFile() function to show the license file 
     //             (or any other file for that matter) paginated to fit
     //             the console screen.
+    //  1.0.11.0 - 2/28/2018 - Cleaned up a few holes where the user 
+    //             could define a zero sided die (also set the die 
+    //             class to default to 6 if it sees a zero). Not as
+    //             redundant as it seems since other interfaces could
+    //             use the Dies and Dice classes (which was me intention
+    //             when I wrote it).
     //
     class Toss
     {
@@ -87,6 +93,11 @@ namespace Dice
                 {
                     if (!Quit)
                     {
+                        if (sideCount == 0)
+                        {
+                            sideCount = 6;
+                            Wl("Zero sides? Really? We switched it to the default of 6 sides.");
+                        }
                         //If we are not quitting, instanciate dies and throw
                         Tot = 0;
                         Dies dice = new Dies(diceCount, adjust, sideCount);

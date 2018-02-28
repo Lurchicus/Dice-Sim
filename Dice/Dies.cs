@@ -17,6 +17,10 @@ namespace Dice
         private Int32 Sides;
         public static List<Die> Cup = new List<Die> { };
 
+        public int Quantity1 { get => Quantity; }
+        public int Adjustment1 { get => Adjustment; }
+        public int Sides1 { get => Sides; }
+
         /// <summary>
         /// Default constructor instanciates a single 6 sided die with no 
         /// adjustment.
@@ -27,7 +31,7 @@ namespace Dice
             Adjustment = 0;
             Sides = 6;
             List<Die> Cup = new List<Die> { };
-            Die Stone = new Die(Sides);
+            Die Stone = new Die(Sides1);
             Cup.Add(Stone);
         }
 
@@ -47,7 +51,13 @@ namespace Dice
             {
                 try
                 {
-                    Die Stone = new Die(Sides);
+                    Die Stone = new Die(Sides1);
+                    if (Stone.Sides != Sides1)
+                    {
+                        //Make sure the Sides weren't overridden (such as
+                        //someone declared a D0)
+                        Sides = Stone.Sides;
+                    }
                     Cup.Add(Stone);
                 }
                 catch(OutOfMemoryException e)
@@ -93,7 +103,7 @@ namespace Dice
         /// </summary>
         public int GetAdjustments()
         {
-            return Adjustment;
+            return Adjustment1;
         }
 
         /// <summary>
@@ -109,7 +119,7 @@ namespace Dice
         /// </summary>
         public int GetCount()
         {
-            return Quantity;
+            return Quantity1;
         }
 
         /// <summary>

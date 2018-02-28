@@ -16,9 +16,9 @@ namespace Dice
         public static Random chance = new Random();
 
         /// <summary>
-        /// Default constructor (0 sides)
+        /// Default constructor (6 sides)
         /// </summary>
-        public Die() => DiceSides = 0;
+        public Die() => DiceSides = 6;
 
         /// <summary>
         /// Overload constructor creates a die of "sides" sides
@@ -33,6 +33,12 @@ namespace Dice
         public int GetThrow()
         {
             //Random chance = new Random();
+            //If 0 sides are selected, override to a standard
+            //siz sided die (better than rolling 0 all the time)
+            if (Sides == 0)
+            {
+                Sides = 6;
+            }
             //if (Sides == 1) { Sides = 2; } 
             //A d1 is coin that can return 0 or 1
             //A d2 is a coin (or 2 sided die) that can return 1 or 2
