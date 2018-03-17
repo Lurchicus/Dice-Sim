@@ -7,7 +7,7 @@ namespace Dice
     /// The dies class creates a collection of die objects. The dies are in a
     /// list object (imagine a dice cup). The Quantity is the number of dice,
     /// sides are the number of sides on the die and adjustment is a 
-    /// negitive or positive value added to the sum of the rolls of the 
+    /// negative or positive value added to the sum of the rolls of the 
     /// individual dies.
     /// </summary>
     class Dies 
@@ -22,7 +22,7 @@ namespace Dice
         public int Sides1 { get => Sides; }
 
         /// <summary>
-        /// Default constructor instanciates a single 6 sided die with no 
+        /// Default constructor instantiates a single 6 sided die with no 
         /// adjustment.
         /// </summary>
         public Dies()

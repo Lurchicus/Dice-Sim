@@ -20,9 +20,9 @@ namespace Dice
     //
     //  1.0.8.0 - 11/17/2017 - Stored to public GitHub repository
     //  1.0.9.0 - 11/18/2017 - Check for overlarge values that may cause
-    //            Int32 overflows (most noticable by getting a negitive
+    //            Int32 overflows (most noticeable by getting a negative
     //            result.
-    //          - Added a try/catch around the die creation code to catrch
+    //          - Added a try/catch around the die creation code to catch
     //            out of memory exceptions. Yes, you can have issues if 
     //            you try to do 1,000,000,000 coin flips.
     //          - Pull the real version number for the intro
@@ -39,8 +39,10 @@ namespace Dice
     //             could define a zero sided die (also set the die 
     //             class to default to 6 if it sees a zero). Not as
     //             redundant as it seems since other interfaces could
-    //             use the Dies and Dice classes (which was me intention
+    //             use the Dies and Dice classes (which was my intention
     //             when I wrote it).
+    //  1.0.12.0 - 3/17/2018 - Fixed some spelling and grammar errors 
+    //           - Cleaned up the die class a bit
     //
     class Toss
     {
@@ -52,7 +54,7 @@ namespace Dice
 
         /// <summary>
         /// Take optional initial CLI input then look for and process 
-        /// addtional input 
+        /// additional input 
         /// </summary>
         /// <param name="args">string[] Command line arguments</param>
         static void Main(string[] args)
@@ -98,7 +100,7 @@ namespace Dice
                             sideCount = 6;
                             Wl("Zero sides? Really? We switched it to the default of 6 sides.");
                         }
-                        //If we are not quitting, instanciate dies and throw
+                        //If we are not quitting, instantiate dies and throw
                         Tot = 0;
                         Dies dice = new Dies(diceCount, adjust, sideCount);
                         Tot += dice.ThrowDice();
@@ -110,7 +112,7 @@ namespace Dice
                                 Wl("Die " + Idx + ": " + dice.Result(Idx));
                             }
                         }
-                        //Dispose of ther dies
+                        //Dispose of their dies
                         dice.Empty();
                         GC.Collect();
                     }
@@ -127,7 +129,7 @@ namespace Dice
                 }
                 if (!Quit)
                 {
-                    //Reprompt
+                    //Re-prompt
                     W(">");
                     Inp = R();
                 }
@@ -135,7 +137,7 @@ namespace Dice
         }
 
         /// <summary>
-        /// Parse and process individual CLI imputs one at a time. By default
+        /// Parse and process individual CLI inputs one at a time. By default
         /// parse out the individual dice command or default to 1d6+0
         /// </summary>
         /// <param name="arg">string Command line input</param>
@@ -289,7 +291,7 @@ namespace Dice
                         }
                         if (ary2.Length <= 0)
                         {
-                            //Nothing to see here, defaut six sided die and no adjustment
+                            //Nothing to see here, default six sided die and no adjustment
                             sideCount = 6;
                             adjust = 0;
                         }
@@ -370,7 +372,7 @@ namespace Dice
             }
             catch (Exception e)
             {
-                Wl("Could not read the the text in file "+FileName+".");
+                Wl("Could not read the text in file "+FileName+".");
                 Wl(e.Message);
             }
         }
