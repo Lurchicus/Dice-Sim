@@ -23,7 +23,6 @@ namespace Dice
         /// Default constructor (6 sides)
         /// </summary>
         public Die() => diceSides = 6;
-
         /// <summary>
         /// Overload constructor creates a die of "sides" sides
         /// </summary>
