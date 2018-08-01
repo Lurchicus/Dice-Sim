@@ -6,30 +6,27 @@ namespace Dice
     /// <summary>
     /// The dies class creates a collection of die objects. The dies are in a
     /// list object (imagine a dice cup). The Quantity is the number of dice,
-    /// sides are the number of sides on the die and adjustment is a 
-    /// negative or positive value added to the sum of the rolls of the 
+    /// sides are the number of sides on the die and adjustment is a
+    /// negative or positive value added to the sum of the rolls of the
     /// individual dies.
     /// </summary>
-    class Dies 
+    internal class Dies
     {
-        private Int32 Quantity;
-        private Int32 Adjustment;
-        private Int32 Sides;
         public static List<Die> Cup = new List<Die> { };
 
-        public int Quantity1 { get => Quantity; }
-        public int Adjustment1 { get => Adjustment; }
-        public int Sides1 { get => Sides; }
+        public int Quantity1 { get; private set; }
+        public int Adjustment1 { get; private set; }
+        public int Sides1 { get; }
 
         /// <summary>
-        /// Default constructor instantiates a single 6 sided die with no 
+        /// Default constructor instantiates a single 6 sided die with no
         /// adjustment.
         /// </summary>
         public Dies()
         {
-            Quantity = 1;
-            Adjustment = 0;
-            Sides = 6;
+            Quantity1 = 1;
+            Adjustment1 = 0;
+            Sides1 = 6;
             List<Die> Cup = new List<Die> { };
             Die Stone = new Die(Sides1);
             Cup.Add(Stone);
@@ -45,8 +42,8 @@ namespace Dice
         public Dies(Int32 HowMany, Int32 TotalAdjustment, Int32 NumSides)
         {
             SetCount(HowMany);
-            Adjustment = TotalAdjustment;
-            Sides = NumSides;
+            Adjustment1 = TotalAdjustment;
+            Sides1 = NumSides;
             for (Int32 Idx = 0; Idx < HowMany; Idx++)
             {
                 try
@@ -56,17 +53,17 @@ namespace Dice
                     {
                         //Make sure the Sides weren't overridden (such as
                         //someone declared a D0)
-                        Sides = Stone.Sides;
+                        Sides1 = Stone.Sides;
                     }
                     Cup.Add(Stone);
                 }
-                catch(OutOfMemoryException e)
+                catch (OutOfMemoryException e)
                 {
                     Toss.Wl("Error! OutOfMemoryException: " + e.Message);
                     Cup.Clear();
-                    throw new OutOfMemoryException(); 
+                    throw new OutOfMemoryException();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Toss.Wl("Error! Undefined exception: " + e.Message);
                     Cup.Clear();
@@ -111,7 +108,7 @@ namespace Dice
         /// </summary>
         public void SetAdjustments(int value)
         {
-            Adjustment = value;
+            Adjustment1 = value;
         }
 
         /// <summary>
@@ -127,7 +124,7 @@ namespace Dice
         /// </summary>
         public void SetCount(int value)
         {
-            Quantity = value;
+            Quantity1 = value;
         }
 
         /// <summary>

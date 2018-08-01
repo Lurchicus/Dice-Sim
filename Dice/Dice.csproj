@@ -25,7 +25,7 @@
     <InstallUrl>\\Tortal-Cove\Users\danrh\deploy\Dice\</InstallUrl>
     <ProductName>Dice Tosser</ProductName>
     <PublisherName>Dan Rhea</PublisherName>
-    <ApplicationRevision>12</ApplicationRevision>
+    <ApplicationRevision>13</ApplicationRevision>
     <ApplicationVersion>1.0.5.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

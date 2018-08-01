@@ -11,11 +11,11 @@ namespace Dice
     //  CLI Parse rule
     //
     //  [quantity int (optional: default="1")]
-    //  d 
+    //  d
     //  [sides int (optional: default=6)]
     //  [ (optional, treated as 0 if omitted)
     //      [operator +|- (default="+")]
-    //      [adjustment int (optional: default="0")] 
+    //      [adjustment int (optional: default="0")]
     //  ]
     //
     //  1.0.8.0 - 11/17/2017 - Stored to public GitHub repository
@@ -23,28 +23,28 @@ namespace Dice
     //            Int32 overflows (most noticeable by getting a negative
     //            result.
     //          - Added a try/catch around the die creation code to catch
-    //            out of memory exceptions. Yes, you can have issues if 
+    //            out of memory exceptions. Yes, you can have issues if
     //            you try to do 1,000,000,000 coin flips.
     //          - Pull the real version number for the intro
     //          - Fix bug where nD1 stopped working (only returned zeros)
     //  1.0.10.0 - 2/12/2018 - Added a few alternate CLI directives to the
-    //             parser so "-" and "/" prefixes are accepted. 
+    //             parser so "-" and "/" prefixes are accepted.
     //           - Added GC.Collect() after clearing the die objects
     //           - Added an "l" command to display the GNU GPL 3
     //             license.
-    //           - Added a ShowFile() function to show the license file 
+    //           - Added a ShowFile() function to show the license file
     //             (or any other file for that matter) paginated to fit
     //             the console screen.
-    //  1.0.11.0 - 2/28/2018 - Cleaned up a few holes where the user 
-    //             could define a zero sided die (also set the die 
+    //  1.0.11.0 - 2/28/2018 - Cleaned up a few holes where the user
+    //             could define a zero sided die (also set the die
     //             class to default to 6 if it sees a zero). Not as
     //             redundant as it seems since other interfaces could
     //             use the Dies and Dice classes (which was my intention
     //             when I wrote it).
-    //  1.0.12.0 - 3/17/2018 - Fixed some spelling and grammar errors 
+    //  1.0.12.0 - 3/17/2018 - Fixed some spelling and grammar errors
     //           - Cleaned up the die class a bit
     //
-    class Toss
+    internal class Toss
     {
         public static Int32 diceCount = 1;
         public static Int32 sideCount = 6;
@@ -53,11 +53,11 @@ namespace Dice
         public static bool Quit = false;
 
         /// <summary>
-        /// Take optional initial CLI input then look for and process 
-        /// additional input 
+        /// Take optional initial CLI input then look for and process
+        /// additional input
         /// </summary>
         /// <param name="args">string[] Command line arguments</param>
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             string Inp = string.Empty;
             Int32 Tot = 0;
@@ -66,7 +66,7 @@ namespace Dice
             AssemblyName thisAsblyName = thisAsbly.GetName();
             Version ver = thisAsblyName.Version;
 
-            Wl("Dice Tosser "+ver+" by Dan Rhea © 2017, 2018\n");
+            Wl("Dice Tosser " + ver + " by Dan Rhea © 2017, 2018\n");
             Wl("q to quit, ? for help");
             if (args.Length > 0)
             {
@@ -120,7 +120,8 @@ namespace Dice
                     if (Quit)
                     {
                         //If the quit flag is on, get out of here
-                        break;                    }
+                        break;
+                    }
                     else
                     {
                         //Otherwise, Display the result
@@ -147,10 +148,10 @@ namespace Dice
             string[] parm1 = { "D" }; //Dies/sides delimiter
             string[] parm2 = { "+", "-" }; //Adjustment delimiter
             string sside = "";
-            switch (arg) 
+            switch (arg)
             {
                 case "-d": //Toggle debug mode on and off
-                case "/d": 
+                case "/d":
                     if (Debug)
                     {
                         Wl("Debug off");
@@ -162,18 +163,21 @@ namespace Dice
                         Debug = true;
                     }
                     break;
+
                 case "q": //Set quit flag
                 case "-q":
                 case "/q":
                     Wl("Goodbye...");
                     Quit = true;
                     break;
+
                 case "x": //Set quit flag
                 case "-x":
                 case "/x":
                     Wl("Goodbye...");
                     Quit = true;
                     break;
+
                 case "?": //Display help
                 case "-?":
                 case "/?":
@@ -184,11 +188,13 @@ namespace Dice
                     Wl("\"l\" to display the license file");
                     Wl("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
                     break;
+
                 case "l": //Display license text
                 case "-l":
                 case "/l":
                     ShowFile("\\gnu_gpl3.txt");
                     break;
+
                 default: //Parse individual dice roll command or default to 1d6+0
                     if (arrg.Length == 0)
                     {
@@ -220,7 +226,7 @@ namespace Dice
                     {
                         //Didn't start with a "D" split using "D" as a delimiter. The first argument
                         //should be the die count
-                        string[] ary = arrg.Split(parm1, StringSplitOptions.RemoveEmptyEntries );
+                        string[] ary = arrg.Split(parm1, StringSplitOptions.RemoveEmptyEntries);
                         sside = ary[0];
                         try
                         {
@@ -247,7 +253,7 @@ namespace Dice
                     string[] ary2 = arrg.Split(parm2, StringSplitOptions.RemoveEmptyEntries);
                     if (ary2.Length == 1)
                     {
-                        //We only got a single result which should be the number of sides 
+                        //We only got a single result which should be the number of sides
                         //on the die with no adjustment
                         try
                         {
@@ -266,7 +272,7 @@ namespace Dice
                         {
                             try
                             {
-                                sideCount = Convert.ToInt32(ary2[0]);                               
+                                sideCount = Convert.ToInt32(ary2[0]);
                             }
                             catch
                             {
@@ -349,15 +355,15 @@ namespace Dice
                     while ((line = sr.ReadLine()) != null)
                     {
                         Wl(line);
-                        if (line.Length > ScreenWidth-1)
+                        if (line.Length > ScreenWidth - 1)
                         {
                             Row = Row + (Int32)(line.Length / ScreenWidth - 1);
                         }
                         else
                         {
-                            Row++; 
+                            Row++;
                         }
-                        if(Row >= ScreenHeight-1)
+                        if (Row >= ScreenHeight - 1)
                         {
                             Row = 0;
                             W("Press Enter to continue (enter q to quit):");
@@ -372,7 +378,7 @@ namespace Dice
             }
             catch (Exception e)
             {
-                Wl("Could not read the text in file "+FileName+".");
+                Wl("Could not read the text in file " + FileName + ".");
                 Wl(e.Message);
             }
         }
