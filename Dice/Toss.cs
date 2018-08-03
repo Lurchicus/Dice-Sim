@@ -43,6 +43,10 @@ namespace Dice
     //             when I wrote it).
     //  1.0.12.0 - 3/17/2018 - Fixed some spelling and grammar errors
     //           - Cleaned up the die class a bit
+    //  1.0.13.0 - 8/1/2018 - More code cleanup, this time using the 
+    //             tool CodeMaid. 
+    //  1.0.14.0 - 8/3/2018 - Starting to look into simplifying the 
+    //             Main(), Parse() and ShowFile() processes.
     //
     internal class Toss
     {
@@ -62,11 +66,7 @@ namespace Dice
             string Inp = string.Empty;
             Int32 Tot = 0;
 
-            Assembly thisAsbly = typeof(Toss).Assembly;
-            AssemblyName thisAsblyName = thisAsbly.GetName();
-            Version ver = thisAsblyName.Version;
-
-            Wl("Dice Tosser " + ver + " by Dan Rhea © 2017, 2018\n");
+            Wl("Dice Tosser " + GetVersion() + " by Dan Rhea © 2017, 2018\n");
             Wl("q to quit, ? for help");
             if (args.Length > 0)
             {
@@ -93,29 +93,7 @@ namespace Dice
                 }
                 else
                 {
-                    if (!Quit)
-                    {
-                        if (sideCount == 0)
-                        {
-                            sideCount = 6;
-                            Wl("Zero sides? Really? We switched it to the default of 6 sides.");
-                        }
-                        //If we are not quitting, instantiate dies and throw
-                        Tot = 0;
-                        Dies dice = new Dies(diceCount, adjust, sideCount);
-                        Tot += dice.ThrowDice();
-                        if (Debug)
-                        {
-                            //If debug is on, show the result on each die
-                            for (Int32 Idx = 0; Idx < dice.GetCount(); Idx++)
-                            {
-                                Wl("Die " + Idx + ": " + dice.Result(Idx));
-                            }
-                        }
-                        //Dispose of their dies
-                        dice.Empty();
-                        GC.Collect();
-                    }
+                    Tot = RollEm(Tot);
 
                     if (Quit)
                     {
@@ -138,6 +116,52 @@ namespace Dice
         }
 
         /// <summary>
+        /// Get and return the program version
+        /// </summary>
+        /// <returns>version string</returns>
+        public static string GetVersion()
+        {
+            Assembly thisAsbly = typeof(Toss).Assembly;
+            AssemblyName thisAsblyName = thisAsbly.GetName();
+            Version ver = thisAsblyName.Version;
+            return ver.ToString();
+        }
+
+        /// <summary>
+        /// Roll the dice and return the running total
+        /// </summary>
+        /// <param name="Total"></param>
+        /// <returns>New total</returns>
+        public static int RollEm(Int32 Total)
+        {
+            Int32 Tot = Total;
+            if (!Quit)
+            {
+                if (sideCount == 0)
+                {
+                    sideCount = 6;
+                    Wl("Zero sides? Really? We switched it to the default of 6 sides.");
+                }
+                //If we are not quitting, instantiate dies and throw
+                Tot = 0;
+                Dies dice = new Dies(diceCount, adjust, sideCount);
+                Tot += dice.ThrowDice();
+                if (Debug)
+                {
+                    //If debug is on, show the result on each die
+                    for (Int32 Idx = 0; Idx < dice.GetCount(); Idx++)
+                    {
+                        Wl("Die " + Idx + ": " + dice.Result(Idx));
+                    }
+                }
+                //Dispose of their dies
+                dice.Empty();
+                GC.Collect();
+            }
+            return Tot;
+        }
+
+        /// <summary>
         /// Parse and process individual CLI inputs one at a time. By default
         /// parse out the individual dice command or default to 1d6+0
         /// </summary>
@@ -152,41 +176,22 @@ namespace Dice
             {
                 case "-d": //Toggle debug mode on and off
                 case "/d":
-                    if (Debug)
-                    {
-                        Wl("Debug off");
-                        Debug = false;
-                    }
-                    else
-                    {
-                        Wl("Debug on");
-                        Debug = true;
-                    }
+                    ParseDebug();
                     break;
 
                 case "q": //Set quit flag
                 case "-q":
                 case "/q":
-                    Wl("Goodbye...");
-                    Quit = true;
-                    break;
-
                 case "x": //Set quit flag
                 case "-x":
                 case "/x":
-                    Wl("Goodbye...");
-                    Quit = true;
+                    ParseQuit();
                     break;
 
                 case "?": //Display help
                 case "-?":
                 case "/?":
-                    Wl("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip");
-                    Wl("where 1 rolls 1 or 0 and 2 rolls 1 or 2.");
-                    Wl("\"-d\" Debug toggle (shows each die result)");
-                    Wl("\"q\" or \"x\" to quit");
-                    Wl("\"l\" to display the license file");
-                    Wl("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
+                    ParseHelp();
                     break;
 
                 case "l": //Display license text
@@ -198,10 +203,7 @@ namespace Dice
                 default: //Parse individual dice roll command or default to 1d6+0
                     if (arrg.Length == 0)
                     {
-                        //No argument so default 1d6+0
-                        if (diceCount == 0) { diceCount = 1; }
-                        if (sideCount == 0) { sideCount = 6; }
-                        if (adjust == 0) { adjust = 0; }
+                        ParseNoArgument();
                         break;
                     }
                     if (arrg.StartsWith("D"))
@@ -209,10 +211,7 @@ namespace Dice
                         //Does the command start with "D"
                         if (arrg.Length == 1)
                         {
-                            //Only a "D" so default 1d6+0
-                            diceCount = 1;
-                            sideCount = 6;
-                            adjust = 0;
+                            ParseDefault();
                             break;
                         }
                         else
@@ -307,6 +306,67 @@ namespace Dice
         }
 
         /// <summary>
+        /// Toggle the debug flag
+        /// </summary>
+        public static void ParseDebug()
+        {
+            if (Debug)
+            {
+                Wl("Debug off");
+                Debug = false;
+            }
+            else
+            {
+                Wl("Debug on");
+                Debug = true;
+            }
+        }
+
+        /// <summary>
+        /// Set the global Quit flag
+        /// </summary>
+        public static void ParseQuit()
+        {
+            Wl("Goodbye...");
+            Quit = true;
+        }
+
+        /// <summary>
+        /// Display program help
+        /// </summary>
+        public static void ParseHelp()
+        {
+            Wl("[[[qty]D]sides][+|-][adj] (default \"1D6+0\") sides of 1 or 2 is a coin flip");
+            Wl("\"-d\" Debug toggle (shows each die result)");
+            Wl("\"q\" or \"x\" to quit");
+            Wl("\"l\" to display the license file");
+            Wl("No input repeats last dice throw or defaults to \"1D6+0\" for first throw");
+            Wl("D1 does a 0 or 1 coin toss, D2 does a 1 or 2 coin toss and D0 is 1D6+0");
+        }
+
+        /// <summary>
+        /// Set dice for a no argument default of 1d6+0
+        /// </summary>
+        public static void ParseNoArgument()
+        {
+            //No argument so default 1d6+0
+            if (diceCount == 0) { diceCount = 1; }
+            if (sideCount == 0) { sideCount = 6; }
+            if (adjust == 0) { adjust = 0; }
+        }
+
+        /// <summary>
+        /// Set a default of 1d6+0
+        /// </summary>
+        public static void ParseDefault()
+        {
+            //Only a "D" so default 1d6+0
+            diceCount = 1;
+            sideCount = 6;
+            adjust = 0;
+        }
+
+        /// <summary>
         /// Will display a paginated file to the Console. If a path
         /// is not supplied, the same path where the program resides
         /// is used
@@ -319,34 +379,9 @@ namespace Dice
             Int32 ScreenWidth = Console.WindowWidth;
             Int32 Row = 0;
             String Inp = "";
-            String Nam = "";
             String AppPath = "";
 
-            if (PathName == null)
-            {
-                AppPath = Assembly.GetExecutingAssembly().Location;
-                Nam = Path.GetFileName(AppPath);
-                AppPath = AppPath.Substring(0, AppPath.Length - Nam.Length);
-                if (FileName.Substring(0, 2) != "\\")
-                {
-                    AppPath += "\\" + FileName;
-                }
-                else
-                {
-                    AppPath += FileName;
-                }
-            }
-            else
-            {
-                if (FileName.Substring(0, 2) != "\\")
-                {
-                    AppPath += PathName + "\\" + FileName;
-                }
-                else
-                {
-                    AppPath = PathName + FileName;
-                }
-            }
+            AppPath = SetPath(FileName, PathName);
             try
             {
                 using (StreamReader sr = new StreamReader(AppPath))
@@ -381,6 +416,46 @@ namespace Dice
                 Wl("Could not read the text in file " + FileName + ".");
                 Wl(e.Message);
             }
+        }
+
+        /// <summary>
+        /// Make sure we have a properly formed path. If initial path is empty,
+        /// set it to the application location.
+        /// </summary>
+        /// <param name="FileName">Name of file to show</param>
+        /// <param name="PathName">Path where file is located</param>
+        /// <returns>Fully formed path with filename</returns>
+        public static string SetPath(String FileName, String PathName = null)
+        {
+            String Nam = "";
+            String AppPath = "";
+
+            if (PathName == null)
+            {
+                AppPath = Assembly.GetExecutingAssembly().Location;
+                Nam = Path.GetFileName(AppPath);
+                AppPath = AppPath.Substring(0, AppPath.Length - Nam.Length);
+                if (FileName.Substring(0, 2) != "\\")
+                {
+                    AppPath += "\\" + FileName;
+                }
+                else
+                {
+                    AppPath += FileName;
+                }
+            }
+            else
+            {
+                if (FileName.Substring(0, 2) != "\\")
+                {
+                    AppPath += PathName + "\\" + FileName;
+                }
+                else
+                {
+                    AppPath = PathName + FileName;
+                }
+            }
+            return AppPath;
         }
 
         /// <summary>
